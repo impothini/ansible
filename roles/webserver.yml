@@ -1,5 +1,5 @@
 - hosts: webserver
-  pre-tasks:
+  pre_tasks:
     - name: When did role start
       command: date
       register: _time
@@ -9,7 +9,7 @@
   roles:
     - webservers
 
-  post-tasks:
+  post_tasks:
       - name: When did role end
         command: date
         register: _time
