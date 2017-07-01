@@ -1,3 +1,9 @@
 - name: Install Apache Webserver
   yum: pkg=httpd state=latest
   notify: Restart HTTPD
+  when: ansible_os_family == 'RedHat'
+
+- name: Install apache2 webserver
+  yum: pkg=apache2 state=latest
+  notify: Restart apache2
+  when: ansible_os_family == 'Debian'
