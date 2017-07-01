@@ -7,7 +7,7 @@
     - debug: var=_time.stdout_lines[0]
 
   roles:
-    - webservers
+    - webserver
 
   post_tasks:
       - name: When did role end
