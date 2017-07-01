@@ -25,6 +25,13 @@ impothini5.mylabserver.com
 [ubantu]
 impothini6.mylabserver.com
 
+
+[appserver]
+impothini4.mylabserver.com
+
+[webserver]
+impothini5.mylabserver.com
+
 # Ex 2: A collection of hosts belonging to the 'webservers' group
 
 ## [webservers]
