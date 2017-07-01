@@ -1,0 +1,17 @@
+- hosts: webserver
+  pre-tasks:
+    - name: When did role start
+      command: date
+      register: _time
+
+    - debug: var=_time.stdout_lines[0]
+
+  roles:
+    - webservers
+
+  post-tasks:
+      - name: When did role end
+        command: date
+        register: _time
+
+      - debug: var=_time.stdout_lines[0]
