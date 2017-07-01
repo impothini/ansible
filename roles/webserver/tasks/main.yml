@@ -1,9 +1,12 @@
-- name: Install Apache Webserver
-  yum: pkg=httpd state=latest
-  notify: Restart HTTPD
+- name: Install Apache Webserver on RedHat
+  yum: pkg='{{ redhat_apache }}' state=latest
+  notify:
+     - Restart HTTPD
+     - Install telnet
   when: ansible_os_family == 'RedHat'
 
-- name: Install apache2 webserver
-  yum: pkg=apache2 state=latest
+- name: Install apache2 webserver on Debian
+  apt: pkg='{{ debian_apache }}' state=latest
   notify: Restart apache2
   when: ansible_os_family == 'Debian'
+

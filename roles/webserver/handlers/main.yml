@@ -1,5 +1,9 @@
 - name: Restart HTTPD
-  service: name=httpd state=restarted
+  service: name='{{ redhat_apache }}' state=restarted
 
 - name: Restart apache2
-  service: name=apache2 state=restarted
+  service: name='{{ debian_apache }}' state=restarted
+
+- name: Install telnet
+  yum: pkg=telnet state=latest
+
