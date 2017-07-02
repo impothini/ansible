@@ -10,5 +10,6 @@
    - name: install lynx
      yum: pkg=lynx state=latest
 
+  handlers:
    - name: restart httpd
      service: name=httpd state=restarted
