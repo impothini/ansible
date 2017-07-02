@@ -1,0 +1,14 @@
+- hosts: centos
+  tasks:
+   - name: Install httpd
+     yum: pkg=httpd state=latest
+     notify: restart httpd
+
+   - name: Install telnet
+     yum: pkg=telnet state=present
+
+   - name: install lynx
+     yum: pkg=lynx state=latest
+
+   - name: restart httpd
+     service: name=httpd state=restarted
