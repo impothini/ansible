@@ -1,0 +1,54 @@
+Vagrant.configure(2) do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+  config.vm.define "ansible" do |ansible|
+
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.name = "ansible-server"
+
+    end
+    ansible.vm.synced_folder "../", "/ansible_code", type: 'nfs'
+#    ansible.vm.synced_folder "../ansibleserver", "/ansible_ansibleserver", type: 'nfs'
+    ansible.vm.box = "ubuntu/trusty64"
+    ansible.vm.hostname = "ansible.mylab.com"
+    ansible.vm.network :private_network, ip: "10.0.0.10"
+    ansible.hostmanager.aliases = %w(ansible)
+
+    ansible.vm.provision "shell", inline: <<-SHELL
+
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get dist-upgrade
+    sudo apt-get install software-properties-common
+    sudo apt-add-repository ppa:ansible/ansible
+    sudo apt-get update
+    sudo apt-get install ansible -y
+    sudo cp /ansible_code/hosts /etc/ansible/hosts
+    SHELL
+
+  end
+
+  config.vm.define "app1" do |app1|
+    config.vm.provider "virtualbox" do |v|
+      v.name = "ansible-app1"
+    end
+    app1.vm.box = "centos/7"
+    app1.vm.hostname = "app1.mylab.com"
+    app1.vm.network :private_network, ip: "10.0.0.11"
+    app1.hostmanager.aliases = %w(app1)
+  end
+
+  config.vm.define "db1" do |db1|
+    config.vm.provider "virtualbox" do |v|
+      v.name = "ansible-db1"
+    end
+    db1.vm.box = "debian/jessie64"
+    db1.vm.hostname = "db1.mylab.com"
+    db1.vm.network :private_network, ip: "10.0.0.12"
+    db1.hostmanager.aliases = %w(db1)
+
+  end
+end
