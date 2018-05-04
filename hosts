@@ -19,19 +19,17 @@
 
 
 [centos]
-impothini4.mylabserver.com
-impothini5.mylabserver.com
+app1.mylab.com
 
-[ubantu]
-impothini6.mylabserver.com
+[debian]
+db1.mylab.com
 
 
 [appserver]
-impothini4.mylabserver.com
+app1.mylab.com
 
-[webserver]
-impothini5.mylabserver.com
-impothini6.mylabserver.com
+[database]
+db1.mylab.com
 
 # Ex 2: A collection of hosts belonging to the 'webservers' group
 
