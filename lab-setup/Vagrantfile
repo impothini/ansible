@@ -13,9 +13,9 @@ Vagrant.configure(2) do |config|
     ansible.vm.synced_folder "../", "/ansible_code", type: 'nfs'
 #    ansible.vm.synced_folder "../ansibleserver", "/ansible_ansibleserver", type: 'nfs'
     ansible.vm.box = "ubuntu/trusty64"
-    ansible.vm.hostname = "ansible.mylab.com"
+    ansible.vm.hostname = "controller.mylab.com"
     ansible.vm.network :private_network, ip: "10.0.0.10"
-    ansible.hostmanager.aliases = %w(ansible)
+    ansible.hostmanager.aliases = %w(controller)
 
     ansible.vm.provision "shell", inline: <<-SHELL
 
@@ -33,6 +33,8 @@ Vagrant.configure(2) do |config|
     sudo cp /ansible_code/hosts /etc/ansible/hosts
     sudo cp /vagrant/id_rsa /root/.ssh/
     sudo cp /vagrant/id_rsa.pub /root/.ssh/
+    sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo service ssh restart
     sudo chmod 400 /root/.ssh/id_rsa*
     SHELL
 
@@ -42,20 +44,28 @@ Vagrant.configure(2) do |config|
     config.vm.provider "virtualbox" do |v|
       v.name = "ansible-app1"
     end
-    app1.vm.box = "centos/7"
+    app1.vm.box = "ubuntu/trusty64"
     app1.vm.hostname = "app1.mylab.com"
     app1.vm.network :private_network, ip: "10.0.0.11"
     app1.hostmanager.aliases = %w(app1)
+    app1.vm.provision "shell", inline: <<-SHELL
+    sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo service ssh restart
+    SHELL
   end
 
   config.vm.define "db1" do |db1|
     config.vm.provider "virtualbox" do |v|
       v.name = "ansible-db1"
     end
-    db1.vm.box = "debian/contrib-jessie64"
+    db1.vm.box = "ubuntu/trusty64"
     db1.vm.hostname = "db1.mylab.com"
     db1.vm.network :private_network, ip: "10.0.0.12"
     db1.hostmanager.aliases = %w(db1)
+    db1.vm.provision "shell", inline: <<-SHELL
+    sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo service ssh restart
+    SHELL
 
   end
 end
