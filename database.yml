@@ -1,0 +1,10 @@
+---
+- name: setup database
+  hosts: database
+  gather_facts: false
+  tasks:
+    - name: install mysql-server
+      apt:
+        name: mysql-server
+        state: present
+        update_cache: yes
