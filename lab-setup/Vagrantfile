@@ -24,9 +24,16 @@ Vagrant.configure(2) do |config|
     sudo apt-get dist-upgrade
     sudo apt-get install software-properties-common
     sudo apt-add-repository ppa:ansible/ansible
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt-get update
+    sudo apt-cache policy docker-ce
+    sudo apt-get install -y docker-ce
+    sudo apt-get install git -y
+    sudo git clone https://github.com/ansible/awx.git
     sudo apt-get install build-essential libssl-dev libffi-dev python-dev python-pip -y
     sudo apt-get install ansible -y
+    sudo pip install docker-py
     sudo pip install --upgrade setuptools
     sudo pip install cryptography
     sudo pip install --upgrade ansible
@@ -34,8 +41,10 @@ Vagrant.configure(2) do |config|
     sudo cp /vagrant/id_rsa /root/.ssh/
     sudo cp /vagrant/id_rsa.pub /root/.ssh/
     sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
     sudo service ssh restart
     sudo chmod 400 /root/.ssh/id_rsa*
+#    sudo ansible-playbook -i /home/vagrant/awx/installer/inventory /home/vagrant/awx/installer/install.yml
     SHELL
 
   end
@@ -50,6 +59,7 @@ Vagrant.configure(2) do |config|
     app1.hostmanager.aliases = %w(app1)
     app1.vm.provision "shell", inline: <<-SHELL
     sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
     sudo service ssh restart
     SHELL
   end
@@ -64,8 +74,25 @@ Vagrant.configure(2) do |config|
     db1.hostmanager.aliases = %w(db1)
     db1.vm.provision "shell", inline: <<-SHELL
     sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
     sudo service ssh restart
     SHELL
 
   end
+
+  config.vm.define "web1" do |web1|
+    config.vm.provider "virtualbox" do |v|
+      v.name = "ansible-web1"
+    end
+    web1.vm.box = "ubuntu/trusty64"
+    web1.vm.hostname = "web1.mylab.com"
+    web1.vm.network :private_network, ip: "10.0.0.14"
+    web1.hostmanager.aliases = %w(web1)
+    web1.vm.provision "shell", inline: <<-SHELL
+    sudo cp /vagrant/sshd_config /etc/ssh/sshd_config
+    sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
+    sudo service ssh restart
+    SHELL
+  end
+
 end
