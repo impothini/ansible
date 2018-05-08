@@ -18,6 +18,8 @@
 ansible
 app1
 db1
+web1
+controller
 
 [loadbalancer]
 ansible
