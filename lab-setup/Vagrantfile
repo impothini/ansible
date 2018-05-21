@@ -44,7 +44,8 @@ Vagrant.configure(2) do |config|
     sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
     sudo service ssh restart
     sudo chmod 400 /root/.ssh/id_rsa*
-#    sudo ansible-playbook -i /home/vagrant/awx/installer/inventory /home/vagrant/awx/installer/install.yml
+    sudo cp /vagrant/inventory /home/vagrant/awx/installer/
+    sudo ansible-playbook -i /home/vagrant/awx/installer/inventory /home/vagrant/awx/installer/install.yml
     SHELL
 
   end
